@@ -22,9 +22,7 @@ Method 2. is derived from the original GPT-3 paper, wherein a technique that emu
 Since this is classification task, we use traditional classification performance metrics to compare methods. 
 For each experiment, we measure precision, recall, F1-score and accuracy. We also measure throughput (i.e. number of words processed per second by each model).
 
-In general, **we can observe that method 2. performs best**, followed by method 3. Interestingly, M2 performs better than M1 in each of these two experiments, with models tied on methods 1. and 4. Its thoughput is, as expected 3x larger than that of M1. But, overall we observed a maximum accuracy of ~30% --quite low-- and that advises *prima facie* the fine-tuning of a foundational model (a simple BERT model with 100M parameters will likely beat M1 or M2 if fine tuned using the IMDB training set). The Qwen models are optimized for programming code
-generation tasks, and for mathematical reasoning using methods such as e.g. chain-of-thought (CoT), this mismatch
-might explain their low performance. Also, M1 and M2 are rather small even for small LLMs (usually, things start to look up when models surpass the 7 billion parameter bar).
+In general, **we can observe that method 2. performs best**, followed by method 3.
 
 For a **detailed** description of the experiments (with numbers, links to the GPT-3 paper, detailed comments and plots), please refer to the notebook under `notebook/analysis_notebook.ipynb`.
 
