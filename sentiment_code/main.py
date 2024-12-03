@@ -1,4 +1,4 @@
-from sentiment_code.sentiment_analysis import *
+from sentiment_analysis import *
 from torchinfo import summary
 from datasets import load_dataset
 import pandas as pd
@@ -15,7 +15,7 @@ warnings.filterwarnings("ignore")
 In this file, we reproduce one of methods (M1) presented in the 
 notebook
 
-    ../notebooks/sentiment_analysis_review_classification.ipynb
+    ../notebooks/analysis_notebook.ipynb
 
 '''
 
@@ -70,13 +70,14 @@ if __name__ == "__main__":
     Download and prepare the IMDB movie reviews dataset
     '''
 
+    print('Deriving a balanced random sample of 5%/500 reviews of IMDB the test set for evaluation')
     dataset = load_dataset("ajaykarthick/imdb-movie-reviews")
     # We're only interested in the test set, as we don't plan to train any model
     df_imdb_test            = pd.DataFrame(dataset['test'])
     df_sample               = df_imdb_test.groupby(['label']).apply(lambda f: f.sample(frac=0.05))
     df_sample['sentiment']  = df_sample['label'].map({0:'negative', 1:'positive'})
-
-    total_sentences, avg_words, total_words, max_words, min_words = corpus_stats(list(df_sample.review.values))
+    print('Test set statistics:')
+    _, _, total_words, _, _ = corpus_stats(list(df_sample.review.values))
 
     '''
     Zero-shot learning example
@@ -87,7 +88,7 @@ if __name__ == "__main__":
                                     generate_response_zero(str(x), 
                                             tokenizer_m, model_m))
     end = time.time()
-    print(f'Time taken: {end-start}s')
+    print(f'Time taken for 1.5B model: {end-start}s')
     med_time = end-start
 
     start = time.time()
@@ -95,22 +96,26 @@ if __name__ == "__main__":
                                     generate_response_zero(str(x), 
                                             tokenizer_s, model_s))
     end = time.time()
-    print(f'Time taken: {end-start}s')
+    print(f'Time taken for 500M model: {end-start}s')
     small_time = end-start
 
     print(f'Time per word for 1.5B model: {total_words / med_time} words per second')
     print(f'Time per word for 500 model : {total_words / small_time} words per second')
 
+    print(f'Performance for 1.5B model:\n')
     performance_report(df_sample.sentiment, 
                        df_sample.response_m, 
                        name='Zero-shot learning (1.5B model)')
+    
+    print(f'Performance for 1.5B model:\n')
     performance_report(df_sample.sentiment, 
                        df_sample.response_s, 
                        name='Zero-shot learning (500M model)')
 
+    print(f'Rendering confusion matrix for 1.5B model')
     confusion_matrix(df_sample.sentiment, 
-                     df_sample.response_m, 
-                     name='Zero-shot learning (1.5B model)')
+                     df_sample.response_m)
+    
+    print(f'Rendering confusion matrix for 500M model')
     confusion_matrix(df_sample.sentiment, 
-                     df_sample.response_s, 
-                     name='Zero-shot learning (500M model)')
+                     df_sample.response_s)

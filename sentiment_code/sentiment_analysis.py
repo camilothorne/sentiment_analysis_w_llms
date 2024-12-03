@@ -1,6 +1,6 @@
 import transformers
 import os
-
+import torch
 
 from sklearn.metrics import classification_report
 from sklearn.metrics import accuracy_score as accuracy
@@ -406,22 +406,15 @@ def performance_report(gold:pd.Series,
     print(result)
 
 
-def confusion_matrix(actual:pd.Series, 
-                    predicted:pd.Series, 
-                    name:str)->None:
+def confusion_matrix(actual:pd.Series, predicted:pd.Series)->None:
     '''
-    Function to display confusion matrix plot.
+    Function to display confusion matrix plot
 
     Arguments:
         - actual:    actual values
         - predicted: predicted values
-        - name:      name of the model
     '''
     confusion_matrix = metrics.confusion_matrix(actual, predicted)
     cm_display = metrics.ConfusionMatrixDisplay(confusion_matrix=confusion_matrix,
                 display_labels=set(predicted.values))
-    cm_display.margins(0.2)
-    cm_display.title(f"Confusion Matrix for {name}")
-    cm_display.savefig(os.path.join(dirname, 
-                                    '../plots/confusion_atrix' + name + '.png'))
-    cm_display.close()
+    cm_display.plot()
