@@ -3,8 +3,10 @@
 This repository contains some demo code on how to build a sentiment analysis application using (self-hosted) LLMs, 
 in particular, using these two open source models:
 
-- **M1)** [Qwen2.5 1.5B, instruction-tuned](https://huggingface.co/bartowski/Qwen2.5-1.5B-Instruct-GGUF/blob/main/Qwen2.5-1.5B-Instruct-Q5_K_M.gguf), and
-- **M2)** [Qwen2.5 500M, instruction-tuned](https://huggingface.co/bartowski/Qwen2.5-0.5B-Instruct-GGUF/blob/main/Qwen2.5-0.5B-Instruct-Q5_K_M.gguf).
+- **M1)** [Qwen2.5 1.5B, instruction-tuned](https://huggingface.co/Qwen/Qwen2.5-1.5B-Instruct), and
+- **M2)** [Qwen2.5 500M, instruction-tuned](https://huggingface.co/Qwen/Qwen2.5-0.5B-Instruct).
+
+For more information on the Qwen models, click [here](https://qwenlm.github.io/blog/qwen2.5/).
 
 As dataset, we use the [IMDB review dataset](https://huggingface.co/datasets/ajaykarthick/imdb-movie-reviews) from HuggingFace, of which we randownly sample 500 reviews (50% positive, 50% negative) from its **test set**.
 
@@ -45,21 +47,23 @@ To run the notebook, type
 cd notebook
 jupyter lab
 ```
-and... ready!
+and... you'll be ready to roll!
 
 For readibility the functions used are also delivered as a (procedural) Python library (see `sentiment_code/sentiment_analysis.py`).
 Additonally, a CLI script, demonstrating how to reproduce on CLI the zero-shot experiment can be executed via:
 ```bash
 python sentiment_code/main.py
 ```
+It will display the confusion matrixes, and write the scores to CSV files in `results/`
+
+The models and their BPE tokenizers will be downloaded from the HuggingFace hub automatically.
 
 ## Notes
 
-- We **randonmly sample 500** reviews from the IMDB dataset. Some performance figures may vary across repeated runs, but the ranking of the models
-and models should not very much.
-- The Qwen models have a large input context window of 32,768 (model) tokens, and hence reviews don't need to
+- We **randonmly sample** 500 reviews from the IMDB dataset. Some performance figures may thus vary across repeated runs, but the ranking of the models and models should not very much.
+- The Qwen models have a large input context window of 32,768 (model) tokens, and hence IMDB reviews don't need to
 be truncated.
-- In the notebook, we include some profiling figures. Such numbers will vay based on the host you use, but the proportions should still hold.
+- In the notebook we include some profiling figures. Such numbers will vay based on the host you use, but the proportions across models and inference methods should still hold.
 
 ## To Do
 
