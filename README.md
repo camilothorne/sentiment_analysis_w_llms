@@ -26,7 +26,7 @@ In general, **we can observe that method 2. performs best**, followed by method 
 
 For a **detailed** description of the experiments (with numbers, links to the GPT-3 paper, detailed comments and plots), please refer to the notebook under `notebook/analysis_notebook.ipynb`.
 
-## Installation, overview and execution
+## Installation and Execution
 
 These demo was implemeted on Python 3.10.12, on a MacBook Air M2 machine, and tested addtionally on a Tesla T4 running on CUDA 12.2. We assume the availability of Anaconda, concretely, that you create
 a virtual environment, and install the dependencies as follows
@@ -45,7 +45,7 @@ To run the notebook, type
 cd notebook
 jupyter lab
 ```
-and... voila!
+and... ready!
 
 For readibility the functions used are also delivered as a (procedural) Python library (see `sentiment_code/sentiment_analysis.py`).
 Additonally, a CLI script, demonstrating how to reproduce on CLI the zero-shot experiment can be executed via:
