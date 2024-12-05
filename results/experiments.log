@@ -1,0 +1,389 @@
+INFO:__main__:Started
+INFO:__main__:Using Silicon / MPS GPU
+INFO:__main__:
+================================================================================
+Layer (type:depth-idx)                                  Param #
+================================================================================
+Qwen2ForCausalLM                                        --
+├─Qwen2Model: 1-1                                       --
+│    └─Embedding: 2-1                                   233,373,696
+│    └─ModuleList: 2-2                                  --
+│    │    └─Qwen2DecoderLayer: 3-1                      46,797,824
+│    │    └─Qwen2DecoderLayer: 3-2                      46,797,824
+│    │    └─Qwen2DecoderLayer: 3-3                      46,797,824
+│    │    └─Qwen2DecoderLayer: 3-4                      46,797,824
+│    │    └─Qwen2DecoderLayer: 3-5                      46,797,824
+│    │    └─Qwen2DecoderLayer: 3-6                      46,797,824
+│    │    └─Qwen2DecoderLayer: 3-7                      46,797,824
+│    │    └─Qwen2DecoderLayer: 3-8                      46,797,824
+│    │    └─Qwen2DecoderLayer: 3-9                      46,797,824
+│    │    └─Qwen2DecoderLayer: 3-10                     46,797,824
+│    │    └─Qwen2DecoderLayer: 3-11                     46,797,824
+│    │    └─Qwen2DecoderLayer: 3-12                     46,797,824
+│    │    └─Qwen2DecoderLayer: 3-13                     46,797,824
+│    │    └─Qwen2DecoderLayer: 3-14                     46,797,824
+│    │    └─Qwen2DecoderLayer: 3-15                     46,797,824
+│    │    └─Qwen2DecoderLayer: 3-16                     46,797,824
+│    │    └─Qwen2DecoderLayer: 3-17                     46,797,824
+│    │    └─Qwen2DecoderLayer: 3-18                     46,797,824
+│    │    └─Qwen2DecoderLayer: 3-19                     46,797,824
+│    │    └─Qwen2DecoderLayer: 3-20                     46,797,824
+│    │    └─Qwen2DecoderLayer: 3-21                     46,797,824
+│    │    └─Qwen2DecoderLayer: 3-22                     46,797,824
+│    │    └─Qwen2DecoderLayer: 3-23                     46,797,824
+│    │    └─Qwen2DecoderLayer: 3-24                     46,797,824
+│    │    └─Qwen2DecoderLayer: 3-25                     46,797,824
+│    │    └─Qwen2DecoderLayer: 3-26                     46,797,824
+│    │    └─Qwen2DecoderLayer: 3-27                     46,797,824
+│    │    └─Qwen2DecoderLayer: 3-28                     46,797,824
+│    └─Qwen2RMSNorm: 2-3                                1,536
+│    └─Qwen2RotaryEmbedding: 2-4                        --
+├─Linear: 1-2                                           233,373,696
+================================================================================
+Total params: 1,777,088,000
+Trainable params: 1,777,088,000
+Non-trainable params: 0
+================================================================================
+INFO:__main__:
+================================================================================
+Layer (type:depth-idx)                                  Param #
+================================================================================
+Qwen2ForCausalLM                                        --
+├─Qwen2Model: 1-1                                       --
+│    └─Embedding: 2-1                                   136,134,656
+│    └─ModuleList: 2-2                                  --
+│    │    └─Qwen2DecoderLayer: 3-1                      14,912,384
+│    │    └─Qwen2DecoderLayer: 3-2                      14,912,384
+│    │    └─Qwen2DecoderLayer: 3-3                      14,912,384
+│    │    └─Qwen2DecoderLayer: 3-4                      14,912,384
+│    │    └─Qwen2DecoderLayer: 3-5                      14,912,384
+│    │    └─Qwen2DecoderLayer: 3-6                      14,912,384
+│    │    └─Qwen2DecoderLayer: 3-7                      14,912,384
+│    │    └─Qwen2DecoderLayer: 3-8                      14,912,384
+│    │    └─Qwen2DecoderLayer: 3-9                      14,912,384
+│    │    └─Qwen2DecoderLayer: 3-10                     14,912,384
+│    │    └─Qwen2DecoderLayer: 3-11                     14,912,384
+│    │    └─Qwen2DecoderLayer: 3-12                     14,912,384
+│    │    └─Qwen2DecoderLayer: 3-13                     14,912,384
+│    │    └─Qwen2DecoderLayer: 3-14                     14,912,384
+│    │    └─Qwen2DecoderLayer: 3-15                     14,912,384
+│    │    └─Qwen2DecoderLayer: 3-16                     14,912,384
+│    │    └─Qwen2DecoderLayer: 3-17                     14,912,384
+│    │    └─Qwen2DecoderLayer: 3-18                     14,912,384
+│    │    └─Qwen2DecoderLayer: 3-19                     14,912,384
+│    │    └─Qwen2DecoderLayer: 3-20                     14,912,384
+│    │    └─Qwen2DecoderLayer: 3-21                     14,912,384
+│    │    └─Qwen2DecoderLayer: 3-22                     14,912,384
+│    │    └─Qwen2DecoderLayer: 3-23                     14,912,384
+│    │    └─Qwen2DecoderLayer: 3-24                     14,912,384
+│    └─Qwen2RMSNorm: 2-3                                896
+│    └─Qwen2RotaryEmbedding: 2-4                        --
+├─Linear: 1-2                                           136,134,656
+================================================================================
+Total params: 630,167,424
+Trainable params: 630,167,424
+Non-trainable params: 0
+================================================================================
+INFO:__main__:The 1.5B model has a vocabulary of 151643 tokens.
+INFO:__main__:The 500M model has a vocabulary of 151643 tokens.
+INFO:__main__:Deriving a balanced random sample of 5%/500 reviews of IMDB the test set for evaluation
+INFO:__main__:Test set statistics:
+INFO:sentiment_analysis:Number of sentences:                  500
+INFO:sentiment_analysis:Average number of words per sentence: 235.072
+INFO:sentiment_analysis:Max number of words per sentence:     1001
+INFO:sentiment_analysis:Min number of words per sentence:     28
+INFO:sentiment_analysis:Total number of words:                117536
+INFO:__main__:Time taken for 1.5B model: 459.85586881637573s
+INFO:__main__:Time taken for 500M model: 318.40198588371277s
+INFO:__main__:Time per word for 1.5B model: 255.59312813061672 words per second
+INFO:__main__:Time per word for 500 model : 369.14342626910206 words per second
+INFO:__main__:Performance for 1.5B model:
+
+INFO:sentiment_analysis:              precision    recall  f1-score   support
+
+       based       0.00      0.00      0.00         0
+    negative       0.07      0.07      0.07       250
+    positive       0.02      0.02      0.02       250
+         the       0.00      0.00      0.00         0
+          to       0.00      0.00      0.00         0
+
+    accuracy                           0.04       500
+   macro avg       0.02      0.02      0.02       500
+weighted avg       0.04      0.04      0.04       500
+
+INFO:__main__:Performance for 1.5B model:
+
+INFO:sentiment_analysis:              precision    recall  f1-score   support
+
+       based       0.00      0.00      0.00         0
+    negative       0.15      0.02      0.04       250
+    positive       0.06      0.03      0.04       250
+         the       0.00      0.00      0.00         0
+        this       0.00      0.00      0.00         0
+
+    accuracy                           0.03       500
+   macro avg       0.04      0.01      0.02       500
+weighted avg       0.10      0.03      0.04       500
+
+INFO:__main__:Rendering confusion matrix for 1.5B model
+INFO:__main__:Rendering confusion matrix for 500M model
+INFO:__main__:Finished
+INFO:__main__:Started
+INFO:__main__:Using Silicon / MPS GPU
+INFO:__main__:
+================================================================================
+Layer (type:depth-idx)                                  Param #
+================================================================================
+Qwen2ForCausalLM                                        --
+├─Qwen2Model: 1-1                                       --
+│    └─Embedding: 2-1                                   233,373,696
+│    └─ModuleList: 2-2                                  --
+│    │    └─Qwen2DecoderLayer: 3-1                      46,797,824
+│    │    └─Qwen2DecoderLayer: 3-2                      46,797,824
+│    │    └─Qwen2DecoderLayer: 3-3                      46,797,824
+│    │    └─Qwen2DecoderLayer: 3-4                      46,797,824
+│    │    └─Qwen2DecoderLayer: 3-5                      46,797,824
+│    │    └─Qwen2DecoderLayer: 3-6                      46,797,824
+│    │    └─Qwen2DecoderLayer: 3-7                      46,797,824
+│    │    └─Qwen2DecoderLayer: 3-8                      46,797,824
+│    │    └─Qwen2DecoderLayer: 3-9                      46,797,824
+│    │    └─Qwen2DecoderLayer: 3-10                     46,797,824
+│    │    └─Qwen2DecoderLayer: 3-11                     46,797,824
+│    │    └─Qwen2DecoderLayer: 3-12                     46,797,824
+│    │    └─Qwen2DecoderLayer: 3-13                     46,797,824
+│    │    └─Qwen2DecoderLayer: 3-14                     46,797,824
+│    │    └─Qwen2DecoderLayer: 3-15                     46,797,824
+│    │    └─Qwen2DecoderLayer: 3-16                     46,797,824
+│    │    └─Qwen2DecoderLayer: 3-17                     46,797,824
+│    │    └─Qwen2DecoderLayer: 3-18                     46,797,824
+│    │    └─Qwen2DecoderLayer: 3-19                     46,797,824
+│    │    └─Qwen2DecoderLayer: 3-20                     46,797,824
+│    │    └─Qwen2DecoderLayer: 3-21                     46,797,824
+│    │    └─Qwen2DecoderLayer: 3-22                     46,797,824
+│    │    └─Qwen2DecoderLayer: 3-23                     46,797,824
+│    │    └─Qwen2DecoderLayer: 3-24                     46,797,824
+│    │    └─Qwen2DecoderLayer: 3-25                     46,797,824
+│    │    └─Qwen2DecoderLayer: 3-26                     46,797,824
+│    │    └─Qwen2DecoderLayer: 3-27                     46,797,824
+│    │    └─Qwen2DecoderLayer: 3-28                     46,797,824
+│    └─Qwen2RMSNorm: 2-3                                1,536
+│    └─Qwen2RotaryEmbedding: 2-4                        --
+├─Linear: 1-2                                           233,373,696
+================================================================================
+Total params: 1,777,088,000
+Trainable params: 1,777,088,000
+Non-trainable params: 0
+================================================================================
+INFO:__main__:
+================================================================================
+Layer (type:depth-idx)                                  Param #
+================================================================================
+Qwen2ForCausalLM                                        --
+├─Qwen2Model: 1-1                                       --
+│    └─Embedding: 2-1                                   136,134,656
+│    └─ModuleList: 2-2                                  --
+│    │    └─Qwen2DecoderLayer: 3-1                      14,912,384
+│    │    └─Qwen2DecoderLayer: 3-2                      14,912,384
+│    │    └─Qwen2DecoderLayer: 3-3                      14,912,384
+│    │    └─Qwen2DecoderLayer: 3-4                      14,912,384
+│    │    └─Qwen2DecoderLayer: 3-5                      14,912,384
+│    │    └─Qwen2DecoderLayer: 3-6                      14,912,384
+│    │    └─Qwen2DecoderLayer: 3-7                      14,912,384
+│    │    └─Qwen2DecoderLayer: 3-8                      14,912,384
+│    │    └─Qwen2DecoderLayer: 3-9                      14,912,384
+│    │    └─Qwen2DecoderLayer: 3-10                     14,912,384
+│    │    └─Qwen2DecoderLayer: 3-11                     14,912,384
+│    │    └─Qwen2DecoderLayer: 3-12                     14,912,384
+│    │    └─Qwen2DecoderLayer: 3-13                     14,912,384
+│    │    └─Qwen2DecoderLayer: 3-14                     14,912,384
+│    │    └─Qwen2DecoderLayer: 3-15                     14,912,384
+│    │    └─Qwen2DecoderLayer: 3-16                     14,912,384
+│    │    └─Qwen2DecoderLayer: 3-17                     14,912,384
+│    │    └─Qwen2DecoderLayer: 3-18                     14,912,384
+│    │    └─Qwen2DecoderLayer: 3-19                     14,912,384
+│    │    └─Qwen2DecoderLayer: 3-20                     14,912,384
+│    │    └─Qwen2DecoderLayer: 3-21                     14,912,384
+│    │    └─Qwen2DecoderLayer: 3-22                     14,912,384
+│    │    └─Qwen2DecoderLayer: 3-23                     14,912,384
+│    │    └─Qwen2DecoderLayer: 3-24                     14,912,384
+│    └─Qwen2RMSNorm: 2-3                                896
+│    └─Qwen2RotaryEmbedding: 2-4                        --
+├─Linear: 1-2                                           136,134,656
+================================================================================
+Total params: 630,167,424
+Trainable params: 630,167,424
+Non-trainable params: 0
+================================================================================
+INFO:__main__:The 1.5B model has a vocabulary of 151643 tokens.
+INFO:__main__:The 500M model has a vocabulary of 151643 tokens.
+INFO:__main__:Deriving a balanced random sample of 5%/500 reviews of IMDB the test set for evaluation
+INFO:__main__:Test set statistics:
+INFO:sentiment_analysis:Number of sentences:                  500
+INFO:sentiment_analysis:Average number of words per sentence: 231.488
+INFO:sentiment_analysis:Max number of words per sentence:     1013
+INFO:sentiment_analysis:Min number of words per sentence:     6
+INFO:sentiment_analysis:Total number of words:                115744
+INFO:__main__:Time taken for 1.5B model: 453.71745586395264s
+INFO:__main__:Time taken for 500M model: 308.7400658130646s
+INFO:__main__:Time per word for 1.5B model: 255.10149213810695 words per second
+INFO:__main__:Time per word for 500 model : 374.89141454702053 words per second
+INFO:__main__:Performance for 1.5B model:
+
+INFO:sentiment_analysis:              precision    recall  f1-score   support
+
+       based       0.00      0.00      0.00         0
+    negative       0.08      0.08      0.08       250
+    positive       0.03      0.02      0.02       250
+         the       0.00      0.00      0.00         0
+          to       0.00      0.00      0.00         0
+
+    accuracy                           0.05       500
+   macro avg       0.02      0.02      0.02       500
+weighted avg       0.05      0.05      0.05       500
+
+INFO:__main__:Performance for 1.5B model:
+
+INFO:sentiment_analysis:              precision    recall  f1-score   support
+
+       based       0.00      0.00      0.00         0
+    negative       0.06      0.01      0.01       250
+    positive       0.09      0.05      0.06       250
+         the       0.00      0.00      0.00         0
+        this       0.00      0.00      0.00         0
+
+    accuracy                           0.03       500
+   macro avg       0.03      0.01      0.02       500
+weighted avg       0.07      0.03      0.04       500
+
+INFO:__main__:Rendering confusion matrix for 1.5B model
+INFO:__main__:Rendering confusion matrix for 500M model
+INFO:__main__:Finished
+INFO:__main__:Started
+INFO:__main__:Using Silicon / MPS GPU
+INFO:__main__:
+================================================================================
+Layer (type:depth-idx)                                  Param #
+================================================================================
+Qwen2ForCausalLM                                        --
+├─Qwen2Model: 1-1                                       --
+│    └─Embedding: 2-1                                   233,373,696
+│    └─ModuleList: 2-2                                  --
+│    │    └─Qwen2DecoderLayer: 3-1                      46,797,824
+│    │    └─Qwen2DecoderLayer: 3-2                      46,797,824
+│    │    └─Qwen2DecoderLayer: 3-3                      46,797,824
+│    │    └─Qwen2DecoderLayer: 3-4                      46,797,824
+│    │    └─Qwen2DecoderLayer: 3-5                      46,797,824
+│    │    └─Qwen2DecoderLayer: 3-6                      46,797,824
+│    │    └─Qwen2DecoderLayer: 3-7                      46,797,824
+│    │    └─Qwen2DecoderLayer: 3-8                      46,797,824
+│    │    └─Qwen2DecoderLayer: 3-9                      46,797,824
+│    │    └─Qwen2DecoderLayer: 3-10                     46,797,824
+│    │    └─Qwen2DecoderLayer: 3-11                     46,797,824
+│    │    └─Qwen2DecoderLayer: 3-12                     46,797,824
+│    │    └─Qwen2DecoderLayer: 3-13                     46,797,824
+│    │    └─Qwen2DecoderLayer: 3-14                     46,797,824
+│    │    └─Qwen2DecoderLayer: 3-15                     46,797,824
+│    │    └─Qwen2DecoderLayer: 3-16                     46,797,824
+│    │    └─Qwen2DecoderLayer: 3-17                     46,797,824
+│    │    └─Qwen2DecoderLayer: 3-18                     46,797,824
+│    │    └─Qwen2DecoderLayer: 3-19                     46,797,824
+│    │    └─Qwen2DecoderLayer: 3-20                     46,797,824
+│    │    └─Qwen2DecoderLayer: 3-21                     46,797,824
+│    │    └─Qwen2DecoderLayer: 3-22                     46,797,824
+│    │    └─Qwen2DecoderLayer: 3-23                     46,797,824
+│    │    └─Qwen2DecoderLayer: 3-24                     46,797,824
+│    │    └─Qwen2DecoderLayer: 3-25                     46,797,824
+│    │    └─Qwen2DecoderLayer: 3-26                     46,797,824
+│    │    └─Qwen2DecoderLayer: 3-27                     46,797,824
+│    │    └─Qwen2DecoderLayer: 3-28                     46,797,824
+│    └─Qwen2RMSNorm: 2-3                                1,536
+│    └─Qwen2RotaryEmbedding: 2-4                        --
+├─Linear: 1-2                                           233,373,696
+================================================================================
+Total params: 1,777,088,000
+Trainable params: 1,777,088,000
+Non-trainable params: 0
+================================================================================
+INFO:__main__:
+================================================================================
+Layer (type:depth-idx)                                  Param #
+================================================================================
+Qwen2ForCausalLM                                        --
+├─Qwen2Model: 1-1                                       --
+│    └─Embedding: 2-1                                   136,134,656
+│    └─ModuleList: 2-2                                  --
+│    │    └─Qwen2DecoderLayer: 3-1                      14,912,384
+│    │    └─Qwen2DecoderLayer: 3-2                      14,912,384
+│    │    └─Qwen2DecoderLayer: 3-3                      14,912,384
+│    │    └─Qwen2DecoderLayer: 3-4                      14,912,384
+│    │    └─Qwen2DecoderLayer: 3-5                      14,912,384
+│    │    └─Qwen2DecoderLayer: 3-6                      14,912,384
+│    │    └─Qwen2DecoderLayer: 3-7                      14,912,384
+│    │    └─Qwen2DecoderLayer: 3-8                      14,912,384
+│    │    └─Qwen2DecoderLayer: 3-9                      14,912,384
+│    │    └─Qwen2DecoderLayer: 3-10                     14,912,384
+│    │    └─Qwen2DecoderLayer: 3-11                     14,912,384
+│    │    └─Qwen2DecoderLayer: 3-12                     14,912,384
+│    │    └─Qwen2DecoderLayer: 3-13                     14,912,384
+│    │    └─Qwen2DecoderLayer: 3-14                     14,912,384
+│    │    └─Qwen2DecoderLayer: 3-15                     14,912,384
+│    │    └─Qwen2DecoderLayer: 3-16                     14,912,384
+│    │    └─Qwen2DecoderLayer: 3-17                     14,912,384
+│    │    └─Qwen2DecoderLayer: 3-18                     14,912,384
+│    │    └─Qwen2DecoderLayer: 3-19                     14,912,384
+│    │    └─Qwen2DecoderLayer: 3-20                     14,912,384
+│    │    └─Qwen2DecoderLayer: 3-21                     14,912,384
+│    │    └─Qwen2DecoderLayer: 3-22                     14,912,384
+│    │    └─Qwen2DecoderLayer: 3-23                     14,912,384
+│    │    └─Qwen2DecoderLayer: 3-24                     14,912,384
+│    └─Qwen2RMSNorm: 2-3                                896
+│    └─Qwen2RotaryEmbedding: 2-4                        --
+├─Linear: 1-2                                           136,134,656
+================================================================================
+Total params: 630,167,424
+Trainable params: 630,167,424
+Non-trainable params: 0
+================================================================================
+INFO:__main__:The 1.5B model has a vocabulary of 151643 tokens.
+INFO:__main__:The 500M model has a vocabulary of 151643 tokens.
+INFO:__main__:Deriving a balanced random sample of 5%/500 reviews of IMDB the test set for evaluation
+INFO:__main__:Test set statistics:
+INFO:sentiment_analysis:Number of sentences:                  500
+INFO:sentiment_analysis:Average number of words per sentence: 236.004
+INFO:sentiment_analysis:Max number of words per sentence:     1196
+INFO:sentiment_analysis:Min number of words per sentence:     35
+INFO:sentiment_analysis:Total number of words:                118002
+INFO:__main__:Time taken for 1.5B model: 474.72771286964417s
+INFO:__main__:Time taken for 500M model: 698.4379372596741s
+INFO:__main__:Time per word for 1.5B model: 248.5677511571823 words per second
+INFO:__main__:Time per word for 500 model : 168.95130362331352 words per second
+INFO:__main__:Performance for 1.5B model:
+
+INFO:sentiment_analysis:              precision    recall  f1-score   support
+
+       based       0.00      0.00      0.00         0
+    negative       0.05      0.04      0.05       250
+    positive       0.03      0.03      0.03       250
+         the       0.00      0.00      0.00         0
+
+    accuracy                           0.04       500
+   macro avg       0.02      0.02      0.02       500
+weighted avg       0.04      0.04      0.04       500
+
+INFO:__main__:Performance for 1.5B model:
+
+INFO:sentiment_analysis:              precision    recall  f1-score   support
+
+       based       0.00      0.00      0.00         0
+    negative       0.03      0.00      0.01       250
+    positive       0.04      0.02      0.03       250
+         the       0.00      0.00      0.00         0
+        this       0.00      0.00      0.00         0
+
+    accuracy                           0.01       500
+   macro avg       0.01      0.01      0.01       500
+weighted avg       0.03      0.01      0.02       500
+
+INFO:__main__:Rendering confusion matrix for 1.5B model
+INFO:__main__:Rendering confusion matrix for 500M model
+INFO:__main__:Finished

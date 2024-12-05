@@ -1,12 +1,16 @@
+import logging
 import transformers
 import os
 import torch
+import matplotlib.pyplot as plt
 
 from sklearn.metrics import classification_report
 from sklearn.metrics import accuracy_score as accuracy
 import pandas as pd
 import sklearn.metrics as metrics
 
+# Set up logging
+logger = logging.getLogger(__name__)
 
 # We mute deprecation warnings
 import warnings
@@ -37,11 +41,11 @@ def corpus_stats(corpus:list[str])->tuple[int,float,int,int,int]:
         n_tokens.append(len(sent.split(' ')))
         tot_words += len(sent.split(' '))
     # Print stats
-    print(f'Number of sentences:                  {tot_sents}')
-    print(f'Average number of words per sentence: {sum(n_tokens)/tot_sents}')
-    print(f'Max number of words per sentence:     {max(n_tokens)}')
-    print(f'Min number of words per sentence:     {min(n_tokens)}')
-    print(f'Total number of words:                {tot_words}')
+    logger.info(f'Number of sentences:                  {tot_sents}')
+    logger.info(f'Average number of words per sentence: {sum(n_tokens)/tot_sents}')
+    logger.info(f'Max number of words per sentence:     {max(n_tokens)}')
+    logger.info(f'Min number of words per sentence:     {min(n_tokens)}')
+    logger.info(f'Total number of words:                {tot_words}')
     return tot_sents, sum(n_tokens)/tot_sents, tot_words, max(n_tokens), min(n_tokens)
 
 
@@ -402,19 +406,24 @@ def performance_report(gold:pd.Series,
                                    output_dict=True)
     df_res = pd.DataFrame(result_dict).transpose()
     df_res.to_csv(os.path.join(dirname, 
-                               '../plots/results_' + name + '.csv'))
-    print(result)
+                               '../results/results_' + name + '.csv'))
+    logger.info(result)
 
 
-def confusion_matrix(actual:pd.Series, predicted:pd.Series)->None:
+def confusion_matrix(actual:pd.Series, 
+                     predicted:pd.Series,
+                     name:str)->None:
     '''
     Function to display confusion matrix plot
 
     Arguments:
         - actual:    actual values
         - predicted: predicted values
+        - name:      name of the model (string)
     '''
     confusion_matrix = metrics.confusion_matrix(actual, predicted)
     cm_display = metrics.ConfusionMatrixDisplay(confusion_matrix=confusion_matrix,
                 display_labels=set(predicted.values))
     cm_display.plot()
+    plt.savefig(os.path.join(dirname, 
+                               '../results/confusion_' + name + '.png'))
