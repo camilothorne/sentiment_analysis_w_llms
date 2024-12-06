@@ -21,7 +21,7 @@ logger = logging.getLogger(__name__)
 
 
 '''
-In this file, we reproduce one of methods (M2 - log likelihood queries) 
+In this file, we reproduce one of methods (M3 - K-shot learning) 
 presented in the notebook
 
     ../notebooks/analysis_notebook.ipynb
@@ -36,8 +36,8 @@ if __name__ == "__main__":
     Start logger
     '''
 
-    logging.basicConfig(filename = os.path.join(dirname, '../results/log-likelihood.log'), 
-                        level=logging.INFO)
+    logging.basicConfig(filename = os.path.join(dirname, '../results/log-k-shot.log'), 
+                        level=logging.INFO, filemode='w')
     logger.info('Started')  
 
     '''
@@ -94,7 +94,7 @@ if __name__ == "__main__":
     '''
 
     logger.info('Deriving a balanced random sample of 5%/500 reviews of IMDB the test set for evaluation')
-    logger.info('Downloading and reasing IMDB dataset...')
+    logger.info('Downloading and reading IMDB dataset...')
     
     dataset = load_dataset("ajaykarthick/imdb-movie-reviews")
     
@@ -107,23 +107,34 @@ if __name__ == "__main__":
     _, _, total_words, _, _ = corpus_stats(list(df_sample.review.values))
 
     '''
-    Log-likelihood learning example
+    K-shot learning example
     '''
 
+    # Generate contexts for k-shot learning
+    context_k = generate_context(dataset, 5)
+
     start = time.time()
-    df_sample['response_m'] = df_sample.review.apply(lambda x: 
-                                                     get_sentiment_from_logit(str(x), 
-                                                     tokenizer_m, model_m))
+    # Note the use of contexts.
+    df_sample['response_m'] = df_sample.review.apply(
+        lambda x: generate_response_with_context(str(x), 
+                                                tokenizer_m, 
+                                                model_m,
+                                                context_k)
+        )
     end = time.time()
-    logger.info(f'Time taken for 1.5B model: {end-start}s')
+    logger.info(f'Time taken: {end-start}s')
     med_time = end-start
 
     start = time.time()
-    df_sample['response_s'] = df_sample.review.apply(lambda x: 
-                                                     get_sentiment_from_logit(str(x), 
-                                                     tokenizer_s, model_s))
+    # Note the use of contexts.
+    df_sample['response_s'] = df_sample.review.apply(
+        lambda x: generate_response_with_context(str(x), 
+                                                tokenizer_s, 
+                                                model_s,
+                                                context_k)
+        )
     end = time.time()
-    logger.info(f'Time taken for 500M model: {end-start}s')
+    logger.info(f'Time taken: {end-start}s')
     small_time = end-start
 
     logger.info(f'Time per word for 1.5B model: {total_words / med_time} words per second')
@@ -132,21 +143,21 @@ if __name__ == "__main__":
     logger.info(f'Performance for 1.5B model:\n')
     performance_report(df_sample.sentiment, 
                        df_sample.response_m, 
-                       name='Log likelihood (1.5B model)')
+                       name='K-shot learning (1.5B model)')
     
-    logger.info(f'Performance for 1.5B model:\n')
+    logger.info(f'Performance for 500M model:\n')
     performance_report(df_sample.sentiment, 
                        df_sample.response_s, 
-                       name='Log likelihood (500M model)')
+                       name='K-shot learning (500M model)')
 
     logger.info(f'Rendering confusion matrix for 1.5B model')
     confusion_matrix(df_sample.sentiment, 
                      df_sample.response_m,
-                     name='Log likelihood (1.5B model)')
+                     name='K-shot learning (1.5B model)')
     
     logger.info(f'Rendering confusion matrix for 500M model')
     confusion_matrix(df_sample.sentiment, 
                      df_sample.response_s,
-                     name='Log likelihood (500M model)')
+                     name='K-shot learning (500M model)')
     
     logger.info('Finished')

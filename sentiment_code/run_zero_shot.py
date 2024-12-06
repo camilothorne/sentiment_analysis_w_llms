@@ -36,8 +36,8 @@ if __name__ == "__main__":
     Start logger
     '''
 
-    logging.basicConfig(filename = os.path.join(dirname, '../results/zero-shot.log'), 
-                        level=logging.INFO)
+    logging.basicConfig(filename = os.path.join(dirname, '../results/log-zero-shot.log'), 
+                        level=logging.INFO, filemode='w')
     logger.info('Started')  
 
     '''
@@ -94,7 +94,7 @@ if __name__ == "__main__":
     '''
 
     logger.info('Deriving a balanced random sample of 5%/500 reviews of IMDB the test set for evaluation')
-    logger.info('Downloading and reasing IMDB dataset...')
+    logger.info('Downloading and reading IMDB dataset...')
     
     dataset = load_dataset("ajaykarthick/imdb-movie-reviews")
     
@@ -134,7 +134,7 @@ if __name__ == "__main__":
                        df_sample.response_m, 
                        name='Zero-shot learning (1.5B model)')
     
-    logger.info(f'Performance for 1.5B model:\n')
+    logger.info(f'Performance for 500M model:\n')
     performance_report(df_sample.sentiment, 
                        df_sample.response_s, 
                        name='Zero-shot learning (500M model)')

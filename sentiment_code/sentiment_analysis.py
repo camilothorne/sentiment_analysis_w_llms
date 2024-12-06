@@ -16,9 +16,17 @@ logger = logging.getLogger(__name__)
 import warnings
 warnings.filterwarnings("ignore")
 
-
 # Get current directory
 dirname = os.path.dirname(__file__)
+
+
+'''
+In this module, we clean up the functions and procedures used in the notebook
+
+    ../notebooks/analysis_notebook.ipynb
+
+but incorporating logging and expanding on comments for better readability.
+'''
 
 
 def corpus_stats(corpus:list[str])->tuple[int,float,int,int,int]:
@@ -28,11 +36,11 @@ def corpus_stats(corpus:list[str])->tuple[int,float,int,int,int]:
     Arguments:
         - corpus: list of strings
     Returns:
-        - number of sentences
-        - average number of tokens per sentence
-        - total number of words
-        - max number of tokens per sentence
-        - min number of tokens per sentence
+        - tot_sents:  number of sentences
+        - avg_words:  average number of tokens per sentence
+        - tot_words:  total number of words
+        - max_words:  max number of tokens per sentence
+        - min_words:  min number of tokens per sentence
     '''
     tot_sents  = len(corpus)
     n_tokens   = []
@@ -60,7 +68,7 @@ def encode_input_zero(input_prompt:str,
         - tokenizer:     AutoTokenizer object
         - model:         AutoModelForCausalLM object
     Returns:
-        - tensor
+        - tokenization:  a PyTorch tensor
     '''
     # The 'user' message is used to query the model with a sentiment prompt.
     messages = [
@@ -94,7 +102,7 @@ def generate_response_zero(input_prompt:str,
         - model:         AutoModelForCausalLM object
         - length:        integer used to cap the length of the output sequence (1 token or word by default)
     Returns:
-        - string (label)
+        - response:      predicted string (label)
     '''
     # We encode inputs into a tensor.
     model_inputs = encode_input_zero(input_prompt, tokenizer, model)
@@ -126,7 +134,7 @@ def encode_sentiment_logit(input_prompt:str,
         - model:         AutoModelForCausalLM object
         - sentiment:     sentiment label - 'positive' or 'negative' (string)
     Returns:
-        - tensor
+        - tokenization:  a PyTorch tensor
     '''
     messages = [
         {"role": "system", "content":
@@ -157,7 +165,7 @@ def get_sentiment_logit(input_prompt:str,
         - model:         AutoModelForCausalLM object
         - sentiment:     sentiment label - 'positive' or 'negative' (string)
     Returns:
-        - logit (float)
+        - score:         logit score (float)
     '''
     # Note that we add a sentiment label here.
     model_inputs = encode_sentiment_logit(input_prompt, tokenizer, model, sentiment)
@@ -184,7 +192,7 @@ def get_sentiment_from_logit(input_prompt:str,
         - tokenizer:     AutoTokenizer object
         - model:         AutoModelForCausalLM object
     Returns:
-        - string (sentiment label)
+        - label:         string (sentiment label)
     '''
     pos = get_sentiment_logit(input_prompt, tokenizer, model, 'positive')
     neg = get_sentiment_logit(input_prompt, tokenizer, model, 'negative')
@@ -209,7 +217,7 @@ def encode_input_with_context(input_prompt:str,
         - model:         AutoModelForCausalLM object
         - in_context:    string with K examples
     Returns:
-        - tensor
+        - tokenization:  a PyTorch tensor
     '''
     # Note the use of contexts.
     messages = [
@@ -242,7 +250,7 @@ def generate_response_with_context(input_prompt:str,
         - model:         AutoModelForCausalLM object
         - in_context:    string with K examples
     Returns:
-        - string (label)
+        - response:      predicted string (label)
     '''
     # Note the use of contexts.
     model_inputs = encode_input_with_context(input_prompt, tokenizer, model, in_context)
@@ -262,11 +270,11 @@ def generate_context(data:dict, num_per_class:int)->str:
     '''
     Generates K positive and K negative examples (shortest examples) from a given dataset (K-shot learning).
 
-    Inputs:
+    Arguments:
         - dataset:         a datasets.DatasetDict object
         - num_per_class:   an integer (count of examples per class)
     Returns:
-        - a string with K positive and K negative examples (shortest examples)
+        - result:          a string with K positive and K negative examples (shortest examples)
     '''
     # We use the train partition, to ensure that the examples are disjoint
     # from our test set:
@@ -277,21 +285,22 @@ def generate_context(data:dict, num_per_class:int)->str:
     df_neg = df_train[df_train.label==0].sort_values(by='len').head(num_per_class)
     # We interate over the examples to form the in context string:
     result = ""
-    for index, row in df_pos.iterrows():
+    for _, row in df_pos.iterrows():
         result = result + str(row['review']) + " Positive.\n"
-    for index, row in df_neg.iterrows():
+    for _, row in df_neg.iterrows():
         result = result + str(row['review']) + " Negative.\n"
     # We return the final context a single string:
+    logger.info(f"{num_per_class}-shot ICL context:\n\n{result}")
     return result
 
 
 def generate_sample_data(data:dict, num_per_class:int)->str:
     '''
-    Inputs:
+    Arguments:
         - dataset:         a dict object
         - num_per_class:   an integer (count of examples per class)
     Returns:
-        - a dataframe
+        - res:             a DataFrame object
     '''
     # We use the train partition, to ensure that the examples are disjoint
     # from our test set:
@@ -324,7 +333,7 @@ def generate_response_with_sampling(input_prompt:str,
         - temp:          temperature value (float)
         - length:        integer used to cap the length of the output sequence (1 token or word by default)
     Returns:
-        - string (label)
+        - response:      predicted string (label)
     '''
     # We encode inputs into a tensor. We re-use the zero-shot function.
     model_inputs = encode_input_zero(input_prompt, tokenizer, model)
@@ -359,7 +368,7 @@ def grid_search(sample:pd.DataFrame,
         - temp_v:      list of temperatures
         - top_k_v:     list of top_k values
     Returns:
-        - dictionary of scores
+        - results:     dictionary of scores
     '''
     # We save results in a dictionary (for a given model and sample 
     # combination) with entries of form:
@@ -382,6 +391,20 @@ def grid_search(sample:pd.DataFrame,
     # with **the last entry being the optimal combination**.
     results = dict(sorted(results.items(), key=lambda item: item[1]))
     return results
+
+
+def parse_grid_args(grid_args:str)->tuple[float,int]:
+    '''
+    Parse the results of grid search, returning the top_k and temperature values.
+
+    Input:
+        - grid_args:        values to parse (string)
+    Returns:
+        - temp, top_k:     temperature (float) and top (integer) values (tuple)
+    '''
+    grid_tup = grid_args.replace('(','').replace(')','').strip().split(',')
+    logger.info(f"Top K: {grid_tup[1]}, Temperature: {grid_tup[0]}")
+    return float(grid_tup[0]), int(grid_tup[1])
 
 
 def performance_report(gold:pd.Series, 

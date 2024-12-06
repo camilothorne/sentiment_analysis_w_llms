@@ -1,7 +1,6 @@
 # Sentiment Analysis with LLMs
 
-This repository contains some demo code on how to build a sentiment analysis application using (self-hosted) LLMs, 
-in particular, using these two Alibaba open source models:
+This repository contains some demo code on how to build a sentiment analysis application using (self-hosted) LLMs, in particular, using these two Alibaba open source models:
 
 - **M1)** [Qwen2.5 1.5B, instruction-tuned](https://huggingface.co/Qwen/Qwen2.5-1.5B-Instruct), and
 - **M2)** [Qwen2.5 500M, instruction-tuned](https://huggingface.co/Qwen/Qwen2.5-0.5B-Instruct).
@@ -19,7 +18,7 @@ In this demonstration, we use PyTorch and HuggingFace to implement various metho
 3. In-context learning a.k.a. k-shot learning.
 4. Sampling with optimized $\text{top}_k$ and temperature $\tau$ parameters.  
 
-Method 2. is derived from the original GPT-3 paper, wherein a technique that emulates a traditional softmax classification layer using LLMs is described.
+Method 2. is derived from the [original GPT-3 paper](https://arxiv.org/abs/2005.14165), wherein a technique that emulates a traditional softmax classification layer using LLMs is described.
 
 Since this is classification task, we use traditional classification performance metrics to compare methods. 
 For each experiment, we measure precision, recall, F1-score and accuracy. We also measure throughput (i.e. number of words processed per second by each model).
@@ -30,34 +29,32 @@ For a **detailed** description of the experiments (with numbers, links to the GP
 
 ## Installation and Execution
 
-These demo was implemeted on Python 3.10.12, on a MacBook Air M2 machine, and tested addtionally on a Tesla T4 running on CUDA 12.2. We assume the availability of Anaconda, concretely, that you create
-a virtual environment, and install the dependencies as follows
+These demo was implemeted on Python 3.10.12, on a MacBook Air M2 machine, and tested addtionally on a Tesla T4 running on CUDA 12.2. We assume the availability of Anaconda, concretely, that you create a virtual environment, and install the dependencies as follows
 ```bash
 conda create -n sent_analysis_w_quen python=3.10.12
 conda activate sent_analysis_w_quen
-conda install -c conda-forge jupyterlab
 pip install -f requirements.txt
 ```
 
-The demo runs on three different architectures: a) CUDA devices / NViDIA GPUs, b) MPS devices / Apple Silicon GPUs and c) x86 devices / Intel CPUs. We recommend using
-either a) or b) with ~10-16GB of GPU RAM in order to execute with sufficient speed. It is implemeted using HuggingFace and PyTorch libraries, which has the advantage of allowing for the use of multiple inference methods (or as people call them, decoding algorithms) alongside the usual sampling decoding customary for LLMs. 
+The demo runs on three different architectures: a) CUDA devices / NViDIA GPUs, b) MPS devices / Apple Silicon GPUs and c) x86 devices / Intel CPUs. We recommend using either a) or b) with ~10-16GB of GPU RAM in order to execute with sufficient speed. It is implemeted using the HuggingFace and PyTorch libraries, which has the advantage of allowing for the use of multiple inference methods (or as people call them, decoding algorithms) alongside the usual sampling decoding customary for LLMs. 
 
-To run the notebook, type
+For readibility the functions used are also delivered as a (procedural) Python library (see `sentiment_code/sentiment_analysis.py`). Additonally, a CLI script, demonstrating how to reproduce on CLI each experiment can be executed via:
 ```bash
+python sentiment_code/run_<exp_name>.py
+```
+It will run the experiment and save all results in `results/` (CSV files for the performance scores, PNG files
+for the confusion matrixes, and a log file with inference latencies and other information).
+
+To run the notebook, you'll need additionally to install JupyterLab and link a kernel to `sent_analysis_w_quen`
+```bash
+pip install ipykernel
+python -m ipykernel install --name sent_analysis_w_quen
+pip install jupyterlab
 cd notebook
 jupyter lab
 ```
-and... you'll be ready to roll!
 
-For readibility the functions used are also delivered as a (procedural) Python library (see `sentiment_code/sentiment_analysis.py`).
-Additonally, a CLI script, demonstrating how to reproduce on CLI each experiment can be executed via:
-```bash
-python sentiment_code/<exp_name>.py
-```
-It will run the experiment and save all scores and in `results/` (CSV files for the performance scores, PNG files
-for the confunsion matrixes and a log file including inference latencies).
-
-The models and their BPE tokenizers will be downloaded from the HuggingFace hub automatically.
+The models and their BPE tokenizers will be in all cases downloaded from the HuggingFace hub automatically.
 
 ## Notes
 
@@ -68,8 +65,5 @@ be truncated.
 
 ## To Do
 
-- Implement logging
 - Implement exception handling
 - Add OOP where useful
-
-It will display confusion matrixes for models M1 and M2 above, and save the precision, recall, F1-score and accuracy figures on the `results` directory.

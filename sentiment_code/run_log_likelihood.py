@@ -21,7 +21,7 @@ logger = logging.getLogger(__name__)
 
 
 '''
-In this file, we reproduce one of methods (M4 - sampling with optimized parameters)
+In this file, we reproduce one of methods (M2 - log likelihood queries) 
 presented in the notebook
 
     ../notebooks/analysis_notebook.ipynb
@@ -36,8 +36,8 @@ if __name__ == "__main__":
     Start logger
     '''
 
-    logging.basicConfig(filename = os.path.join(dirname, '../results/experiments.log'), 
-                        level=logging.INFO)
+    logging.basicConfig(filename = os.path.join(dirname, '../results/log-likelihood.log'), 
+                        level=logging.INFO, filemode='w')
     logger.info('Started')  
 
     '''
@@ -94,7 +94,7 @@ if __name__ == "__main__":
     '''
 
     logger.info('Deriving a balanced random sample of 5%/500 reviews of IMDB the test set for evaluation')
-    logger.info('Downloading and reasing IMDB dataset...')
+    logger.info('Downloading and reading IMDB dataset...')
     
     dataset = load_dataset("ajaykarthick/imdb-movie-reviews")
     
@@ -107,58 +107,23 @@ if __name__ == "__main__":
     _, _, total_words, _, _ = corpus_stats(list(df_sample.review.values))
 
     '''
-    Sampling learning example
+    Log-likelihood learning example
     '''
 
-    # We plan to consider 6x6 = 36 possible combinations
-    temp_values =  [0.1, 0.2, 0.4, 0.6, 0.8, 1.0]
-    top_k_values = [1000, 800, 600, 400, 200, 100]
-
-    # We'll use a (balanced) sample of 40 examples to optimize parameters:
-    df_small_sample = generate_sample_data(dataset, 20)
-
-    # Grid for 1.5B model
     start = time.time()
-    grid_med = grid_search(df_small_sample, tokenizer_m, model_m, top_k_values, temp_values)
+    df_sample['response_m'] = df_sample.review.apply(lambda x: 
+                                                     get_sentiment_from_logit(str(x), 
+                                                     tokenizer_m, model_m))
     end = time.time()
-    logger.info(f'Time taken: {end-start}s')
-    logger.info(f'[1.5B] Maximum accuracy with (temp, top_k) {list(grid_med.keys())[-1]}: 
-        {grid_med[list(grid_med.keys())[-1]]}')
-
-    # Grid for 500M model
-    start = time.time()
-    grid_small = grid_search(df_small_sample, tokenizer_s, model_s, top_k_values, temp_values)
-    end = time.time()
-    logger.info(f'Time taken: {end-start}s')
-    logger.info(f'[500M] Maximum accuracy with (temp, top_k) {list(grid_small.keys())[-1]}: 
-        {grid_small[list(grid_small.keys())[-1]]}')
-
-    # We plug grid values
-    temp_m, top_k_m = grid_med[list(grid_med.keys())[-1]]
-    start = time.time()
-    df_sample['response_m'] = df_sample.review.apply(
-        lambda x: generate_response_with_sampling(str(x), 
-                                                tokenizer_m, 
-                                                model_m, 
-                                                top_k=int(top_k_m), 
-                                                temp=float(temp_m)
-                                                ))
-    end = time.time()
-    logger.info(f'Time taken: {end-start}s')
+    logger.info(f'Time taken for 1.5B model: {end-start}s')
     med_time = end-start
 
-    # We plug grid values
-    temp_s, top_k_s = grid_small[list(grid_small.keys())[-1]]
     start = time.time()
-    df_sample['response_s'] = df_sample.review.apply(
-        lambda x: generate_response_with_sampling(str(x), 
-                                                tokenizer_s, 
-                                                model_s, 
-                                                top_k=int(top_k_s), 
-                                                temp=float(top_k_s)
-                                                ))
+    df_sample['response_s'] = df_sample.review.apply(lambda x: 
+                                                     get_sentiment_from_logit(str(x), 
+                                                     tokenizer_s, model_s))
     end = time.time()
-    logger.info(f'Time taken: {end-start}s')
+    logger.info(f'Time taken for 500M model: {end-start}s')
     small_time = end-start
 
     logger.info(f'Time per word for 1.5B model: {total_words / med_time} words per second')
@@ -167,21 +132,21 @@ if __name__ == "__main__":
     logger.info(f'Performance for 1.5B model:\n')
     performance_report(df_sample.sentiment, 
                        df_sample.response_m, 
-                       name='Zero-shot learning (1.5B model)')
+                       name='Log likelihood (1.5B model)')
     
-    logger.info(f'Performance for 1.5B model:\n')
+    logger.info(f'Performance for 500M model:\n')
     performance_report(df_sample.sentiment, 
                        df_sample.response_s, 
-                       name='Zero-shot learning (500M model)')
+                       name='Log likelihood (500M model)')
 
     logger.info(f'Rendering confusion matrix for 1.5B model')
     confusion_matrix(df_sample.sentiment, 
                      df_sample.response_m,
-                     name='Zero-shot learning (1.5B model)')
+                     name='Log likelihood (1.5B model)')
     
     logger.info(f'Rendering confusion matrix for 500M model')
     confusion_matrix(df_sample.sentiment, 
                      df_sample.response_s,
-                     name='Zero-shot learning (500M model)')
+                     name='Log likelihood (500M model)')
     
     logger.info('Finished')
