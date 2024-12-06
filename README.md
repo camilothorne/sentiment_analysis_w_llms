@@ -50,11 +50,12 @@ jupyter lab
 and... you'll be ready to roll!
 
 For readibility the functions used are also delivered as a (procedural) Python library (see `sentiment_code/sentiment_analysis.py`).
-Additonally, a CLI script, demonstrating how to reproduce on CLI the zero-shot experiment can be executed via:
+Additonally, a CLI script, demonstrating how to reproduce on CLI each experiment can be executed via:
 ```bash
-python sentiment_code/main.py
+python sentiment_code/<exp_name>.py
 ```
-It will display the confusion matrixes, and write the scores to CSV files in `results/`
+It will run the experiment and save all scores and in `results/` (CSV files for the performance scores, PNG files
+for the confunsion matrixes and a log file including inference latencies).
 
 The models and their BPE tokenizers will be downloaded from the HuggingFace hub automatically.
 

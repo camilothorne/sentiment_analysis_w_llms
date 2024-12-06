@@ -21,7 +21,7 @@ logger = logging.getLogger(__name__)
 
 
 '''
-In this file, we reproduce one of methods (M1 - zero shot learning) 
+In this file, we reproduce one of methods (M4 - sampling with optimized parameters)
 presented in the notebook
 
     ../notebooks/analysis_notebook.ipynb

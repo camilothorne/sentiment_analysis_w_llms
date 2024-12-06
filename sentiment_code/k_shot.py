@@ -21,7 +21,7 @@ logger = logging.getLogger(__name__)
 
 
 '''
-In this file, we reproduce one of methods (M1 - zero shot learning) 
+In this file, we reproduce one of methods (M3 - K-shot learning) 
 presented in the notebook
 
     ../notebooks/analysis_notebook.ipynb
