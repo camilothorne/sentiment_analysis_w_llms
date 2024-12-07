@@ -31,7 +31,7 @@ but incorporating logging and expanding on comments for better readability.
 
 def corpus_stats(corpus:list[str])->tuple[int,float,int,int,int]:
     '''
-    Corpus statistics (whitespace tokenization)
+    Corpus statistics (whitespace tokenization).
     
     Arguments:
         - corpus: list of strings
@@ -242,7 +242,8 @@ def generate_response_with_context(input_prompt:str,
                       in_context:str,
                       length:int=1)->str:
     '''
-    Function for generating responses, with a variable storing in-context examples (K-shot learning).
+    Function for generating responses, with a variable 
+    storing in-context examples (K-shot learning).
 
     Arguments:
         - input_prompt:  query string
@@ -268,7 +269,8 @@ def generate_response_with_context(input_prompt:str,
 
 def generate_context(data:dict, num_per_class:int)->str:
     '''
-    Generates K positive and K negative examples (shortest examples) from a given dataset (K-shot learning).
+    Generates K positive and K negative examples (shortest examples) 
+    from a given dataset (K-shot learning).
 
     Arguments:
         - dataset:         a datasets.DatasetDict object
@@ -296,6 +298,8 @@ def generate_context(data:dict, num_per_class:int)->str:
 
 def generate_sample_data(data:dict, num_per_class:int)->str:
     '''
+    Generates sample for parameter optimization.
+
     Arguments:
         - dataset:         a dict object
         - num_per_class:   an integer (count of examples per class)
@@ -323,7 +327,7 @@ def generate_response_with_sampling(input_prompt:str,
                       length:int=1
                      )->str:
     '''
-    Function for generating responses
+    Function for generating responses.
 
     Arguments:
         - input_prompt:  query string
@@ -407,6 +411,147 @@ def parse_grid_args(grid_args:str)->tuple[float,int]:
     return float(grid_tup[0]), int(grid_tup[1])
 
 
+def process_input_cot(input_prompt:str,
+                 tokenizer:transformers.AutoTokenizer,
+                 model:transformers.AutoModelForCausalLM,
+                 length:int=10)->torch.Tensor:
+    '''
+    Function for COT sentiment inference.
+
+    Arguments:
+        - input_prompt:  input query string
+        - tokenizer:     AutoTokenizer object
+        - model:         AutoModelForCausalLM object
+        - length:        max length of generation (integer)
+    Returns:
+        - result:        a generated string
+    '''
+
+    # 1st element of chain
+    message_1 = [
+        {"role": "system", "content":
+           "You are Qwen, created by Alibaba Cloud. You are a helpful assistant."},
+        {"role": "user", "content":
+         "Given the text: '" + input_prompt + 
+         "' Which specific aspect is being mentioned? The specific aspect is"}
+    ]
+    text_1 = tokenizer.apply_chat_template(
+        message_1,
+        tokenize=False,
+        add_generation_prompt=True
+    )
+    tokens_1 = tokenizer([text_1],
+                      return_tensors = 'pt'
+                    ).to(model.device)
+    generated_ids_1 = model.generate(
+        **tokens_1,
+        max_new_tokens=length
+    )
+    generated_ids_1 = [
+        output_ids_1[len(input_ids_1):] for input_ids_1,
+            output_ids_1 in zip(tokens_1.input_ids, generated_ids_1)
+    ]
+    response_1 = tokenizer.batch_decode(generated_ids_1, skip_special_tokens=True)[0]
+
+    # 2nd element of chain
+    message_2 = [
+        {"role": "system", "content":
+           "You are Qwen, created by Alibaba Cloud. You are a helpful assistant."},
+        {"role": "user", "content":
+            "Given the text: '"  + input_prompt + 
+            "' and the aspect '" + response_1   + 
+            "' Based on common sense, what is the implicit opinion towards this aspect? The opinion is"}
+    ]
+    text_2 = tokenizer.apply_chat_template(
+        message_2,
+        tokenize=False,
+        add_generation_prompt=True
+    )
+    tokens_2 = tokenizer([text_2],
+                      return_tensors = 'pt'
+                    ).to(model.device)
+    generated_ids_2 = model.generate(
+        **tokens_2,
+        max_new_tokens=length
+    )
+    generated_ids_2 = [
+        output_ids_2[len(input_ids_2):] for input_ids_2,
+            output_ids_2 in zip(tokens_2.input_ids, generated_ids_2)
+    ]
+    response_2 = tokenizer.batch_decode(generated_ids_2, skip_special_tokens=True)[0]
+
+    # Final element of chain
+    message_3 = [
+        {"role": "system", "content":
+           "You are Qwen, created by Alibaba Cloud. You are a helpful assistant."},
+        {"role": "user", "content":
+            "Given the text: '"   + input_prompt + 
+            "' the apect '"       + response_1   +
+            "' and the opinion '" + response_2   +
+            "' What would be the sentiment expressed? Negative or Positive?"}
+    ]
+    text_3 = tokenizer.apply_chat_template(
+        message_3,
+        tokenize=False,
+        add_generation_prompt=True
+    )
+    tokens_3 = tokenizer([text_3],
+                      return_tensors = 'pt'
+                    ).to(model.device)
+    generated_ids_3 = model.generate(
+        **tokens_3,
+        max_new_tokens=length
+    )
+    generated_ids_3 = [
+        output_ids_3[len(input_ids_3):] for input_ids_3,
+            output_ids_3 in zip(tokens_3.input_ids, generated_ids_3)
+    ]
+    response_3 = tokenizer.batch_decode(generated_ids_3, skip_special_tokens=True)[0]
+
+    # We return the COT final output
+    return response_3
+
+
+def mine_response_cot(response:str)->str:
+    '''
+    With CoT, the models may return complete phrases or short sentences.
+    We thus implement a method that infers the polarity of the generated
+    string.
+
+    Arguments:
+        - response:      generated text
+    Returns:
+        - label:         predicted string (negative, positive or NaN)
+    '''
+    if 'positive' in response.lower() or 'good' in response.lower() or 'great' in response.lower():
+        return 'positive'
+    elif 'negative' in response.lower() or 'bad' in response.lower() or 'terrible' in response.lower():
+        return 'negative'
+    else:
+        return 'NaN'
+
+
+def get_sentiment_cot(input_prompt:str,
+                 tokenizer:transformers.AutoTokenizer,
+                 model:transformers.AutoModelForCausalLM,
+                 length:int=10)->str:
+    '''
+    This function combines `mine_response_cot` with
+    `process_input_cot`
+    
+    Arguments:
+        - input_prompt:  input query string
+        - tokenizer:     AutoTokenizer object
+        - model:         AutoModelForCausalLM object
+        - length:        max length of generation (integer)
+    Returns:
+        - result:        string label (positive, negative or NaN)
+    '''
+    raw_response = process_input_cot(input_prompt, tokenizer, model)
+    response = mine_response_cot(raw_response)
+    return response
+
+
 def performance_report(gold:pd.Series, 
                        pred:pd.Series,
                        name:str
@@ -433,11 +578,25 @@ def performance_report(gold:pd.Series,
     logger.info(result)
 
 
+def save_predictions(predictions:pd.DataFrame, name:str
+                       )->None:
+    '''
+    Function to save predictions.
+
+    Arguments:
+        - predictions:      model predictions (DataFrame object)
+        - name:             name of the model (string)
+    '''
+    predictions.to_csv(os.path.join(dirname, 
+                '../results/predictions_' + name + '.csv'), index=False)
+    logger.info('Saving predictions to disk.')
+
+
 def confusion_matrix(actual:pd.Series, 
                      predicted:pd.Series,
                      name:str)->None:
     '''
-    Function to display confusion matrix plot
+    Function to display confusion matrix plot.
 
     Arguments:
         - actual:    actual values
