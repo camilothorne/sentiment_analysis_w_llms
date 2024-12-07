@@ -16,14 +16,18 @@ In this demonstration, we use PyTorch and HuggingFace to implement various metho
 1. Zero-shot inference (with greedy decoding).
 2. Log-likelihood queries (with greedy decoding).
 3. In-context learning a.k.a. k-shot learning.
-4. Sampling with optimized $\text{top}_k$ and temperature $\tau$ parameters.  
+4. Sampling with optimized $\text{top}_k$ and temperature $\tau$ parameters.
+5. Chain-of-thought reasoning.
 
-Method 2. is derived from the [original GPT-3 paper](https://arxiv.org/abs/2005.14165), wherein a technique that emulates a traditional softmax classification layer using LLMs is described.
+Method 2. is derived from the [original GPT-3 paper](https://arxiv.org/abs/2005.14165), wherein a technique that emulates a traditional softmax classification layer using LLMs is described. Method 5. is inspired from
+[this](https://arxiv.org/pdf/2305.11255) application of CoT to sentiment analysis.
 
 Since this is classification task, we use traditional classification performance metrics to compare methods. 
 For each experiment, we measure precision, recall, F1-score and accuracy. We also measure throughput (i.e. number of words processed per second by each model).
 
-In general, **we can observe that method 2. performs best**, followed by method 3.
+In general, **we can observe that method 2. performs best**, followed by method 3, with an accuracy of ~29%.
+This number, while low, is consistent with the performance reported by these models on open classification
+benchmarks such as MMLU (e.g. ~7-10% on the [HuggingFace leaderbaord](https://huggingface.co/spaces/open-llm-leaderboard/open_llm_leaderboard)).
 
 For a **detailed** description of the experiments (with numbers, links to the GPT-3 paper, detailed comments and plots), please refer to the notebook under `notebook/analysis_notebook.ipynb`.
 
@@ -67,5 +71,5 @@ be truncated.
 
 ## To Do
 
-- Implement exception handling
-- Add OOP where useful
+- Implement exception handling.
+- Add OOP where useful.

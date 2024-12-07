@@ -578,8 +578,8 @@ def performance_report(gold:pd.Series,
     logger.info(result)
 
 
-def save_predictions(predictions:pd.DataFrame, name:str
-                       )->None:
+def save_predictions(predictions:pd.DataFrame, 
+                     name:str)->None:
     '''
     Function to save predictions.
 
