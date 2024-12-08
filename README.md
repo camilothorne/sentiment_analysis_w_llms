@@ -2,8 +2,8 @@
 
 This repository contains some demo code on how to build a sentiment analysis application using (self-hosted) LLMs, in particular, using these two Alibaba open source models:
 
-- **M1)** [Qwen2.5 1.5B, instruction-tuned](https://huggingface.co/Qwen/Qwen2.5-1.5B-Instruct), and
-- **M2)** [Qwen2.5 500M, instruction-tuned](https://huggingface.co/Qwen/Qwen2.5-0.5B-Instruct).
+- **M1) ("medium")** [Qwen2.5 1.5B, instruction-tuned](https://huggingface.co/Qwen/Qwen2.5-1.5B-Instruct), and
+- **M2) ("small")**  [Qwen2.5 500M, instruction-tuned](https://huggingface.co/Qwen/Qwen2.5-0.5B-Instruct).
 
 For more information on the Qwen models, click [here](https://qwenlm.github.io/blog/qwen2.5/).
 
@@ -15,7 +15,7 @@ In this demonstration, we use PyTorch and HuggingFace to implement various metho
 
 1. Zero-shot inference (with greedy decoding).
 2. Log-likelihood queries (with greedy decoding).
-3. In-context learning a.k.a. k-shot learning.
+3. In-context learning a.k.a. $k$-shot learning (with $k=5$).
 4. Sampling with optimized $\text{top}_k$ and temperature $\tau$ parameters.
 5. Chain-of-thought reasoning.
 
@@ -27,9 +27,14 @@ For each experiment, we measure precision, recall, F1-score and accuracy. We als
 
 In general, **we can observe that method 2. performs best**, followed by method 3, with an accuracy of ~29%.
 This number, while low, is consistent with the performance reported by these models on open classification
-benchmarks such as MMLU (e.g. ~7-10% on the [HuggingFace leaderbaord](https://huggingface.co/spaces/open-llm-leaderboard/open_llm_leaderboard)).
+benchmarks such as MMLU (e.g. ~7-10% on the [HuggingFace leaderbaord](https://huggingface.co/spaces/open-llm-leaderboard/open_llm_leaderboard)). Method 2 also yields the highest prediction agreement among the
+models. Lastly, M2 seems to perform better than M1 for this task.
 
-For a **detailed** description of the experiments (with numbers, links to the GPT-3 paper, detailed comments and plots), please refer to the notebook under `notebook/analysis_notebook.ipynb`.
+<p style="text-align: center;">
+<img src="results/accuracy_scores.png" width="300"> &nbsp; &nbsp; &nbsp; &nbsp; <img src="results/agreement_scores.png" width="257.5">
+</p>
+
+For a **detailed description and explanation** of the experiments (with numbers, links to the GPT-3 paper, detailed comments and plots), please refer to the notebook under `notebook/analysis_notebook.ipynb`.
 
 ## Installation and Execution
 
