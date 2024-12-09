@@ -52,8 +52,8 @@ For readibility the functions used are also delivered as a (procedural) Python l
 python sentiment_code/run_<exp_name>.py
 ```
 It will run the experiment and save all results in `results/` (CSV files for the performance scores, PNG files
-for the confusion matrixes, and a log file with inference latencies and other information). Each experiment takes
-between 15-30 mins on a MacBook Air M2.
+for the confusion matrixes, and a log file with inference latencies and other information). Experiments 1-4 take
+between 15-30 mins on a MacBook Air M2, while experiment 5 (CoT) takes around 60 minutes.
 
 To run the notebook, you'll need additionally to install JupyterLab and link a kernel to `sent_analysis_w_quen` (terminal):
 ```bash
