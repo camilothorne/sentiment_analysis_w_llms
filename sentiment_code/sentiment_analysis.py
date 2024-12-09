@@ -3,6 +3,7 @@ import transformers
 import os
 import torch
 import matplotlib.pyplot as plt
+import numpy as np
 
 from sklearn.metrics import classification_report
 from sklearn.metrics import accuracy_score as accuracy
@@ -609,3 +610,43 @@ def confusion_matrix(actual:pd.Series,
     cm_display.plot()
     plt.savefig(os.path.join(dirname, 
                                '../results/confusion_' + name + '.png'))
+    
+
+def plot_accuracy(scores:pd.DataFrame)->None:
+    '''
+    Function to display accuracy
+
+    Arguments:
+        - scores:    DataFrame of scores
+    '''
+    plt.bar(scores.model, scores.acc)
+    plt.xlabel('Models')
+    plt.ylabel('Accuracy')
+    plt.xticks(range(0,scores.shape[0]+10), rotation=70, fontsize=8)
+    plt.margins(0.05)
+    plt.title('Accuracy Distribution')
+    plt.savefig(os.path.join(dirname, 
+                               '../results/accuracy_scores.png'))
+
+
+def plot_agreement(scores:np.array, 
+                   labels:list)->None:
+    '''
+    Function to display agreement scores
+
+    Arguments:
+        - scores:    array of scores
+        - labels:    list of labels
+    '''
+    plt.imshow(scores) 
+    plt.yticks(range(0,len(labels)), labels, fontsize=8)
+    plt.xticks(range(0,len(labels)), labels, fontsize=8, rotation=90)
+    # Loop over data dimensions to paste scores.
+    for i in range(len(labels)):
+        for j in range(i+1,len(labels)):
+            text = plt.text(j, i, "%.2f" % scores[i, j],
+                           ha="center", va="center", color="w", fontsize=8)
+    plt.margins(0.05)
+    plt.title('Model Pairwise Agreement Scores')
+    plt.savefig(os.path.join(dirname, 
+                               '../results/agreement_scores.png'))
